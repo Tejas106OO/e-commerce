@@ -35,7 +35,7 @@ export default function Search() {
           </p>
 
           {results.length > 0 ? (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 'var(--space-lg)' }}>
+            <div className="grid-products">
               {results.map((product, i) => (
                 <ProductCard key={product.id} product={product} index={i} />
               ))}

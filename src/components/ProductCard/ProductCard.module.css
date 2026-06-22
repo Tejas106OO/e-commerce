@@ -5,6 +5,19 @@
   overflow: hidden;
   transition: all var(--transition-base);
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card:not(.listCard) .info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card:not(.listCard) .priceRow {
+  margin-top: auto;
 }
 
 .card:hover {

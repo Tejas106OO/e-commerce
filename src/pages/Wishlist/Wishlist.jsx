@@ -39,7 +39,7 @@ export default function Wishlist() {
           <Heart size={24} style={{ verticalAlign: 'middle', marginRight: 8, color: 'var(--color-error)' }} />
           My Wishlist ({items.length})
         </h1>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 'var(--space-lg)' }}>
+        <div className="grid-products">
           {items.map((product, i) => (
             <motion.div
               key={product.id}
