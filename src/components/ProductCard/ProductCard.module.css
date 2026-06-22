@@ -220,3 +220,68 @@
     transform: translateY(0);
   }
 }
+
+/* List View Card Layout */
+.listCard {
+  display: flex;
+  flex-direction: row;
+  height: 220px;
+  align-items: stretch;
+}
+
+.listCard .imageWrapper {
+  width: 200px;
+  height: 100%;
+  aspect-ratio: auto;
+  flex-shrink: 0;
+}
+
+.listCard .quickAdd {
+  transform: translateY(0);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 1;
+}
+
+.listCard .info {
+  padding: var(--space-lg) var(--space-xl);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-xs);
+}
+
+.listCard .name {
+  font-size: 1.1rem;
+  margin-bottom: 2px;
+}
+
+.listCard .brand {
+  font-size: 0.75rem;
+}
+
+.listCard .price {
+  font-size: 1.25rem;
+}
+
+@media (max-width: 600px) {
+  .listCard {
+    height: 160px;
+  }
+  .listCard .imageWrapper {
+    width: 130px;
+  }
+  .listCard .info {
+    padding: var(--space-md);
+  }
+  .listCard .name {
+    font-size: 0.95rem;
+  }
+  .listCard .quickAdd {
+    padding: 0.5rem;
+    font-size: 0.7rem;
+  }
+}
+

@@ -7,7 +7,7 @@ import { useToast } from '../../context/ToastContext'
 import { formatPrice, getDiscountPercent } from '../../utils/helpers'
 import styles from './ProductCard.module.css'
 
-export default function ProductCard({ product, index = 0 }) {
+export default function ProductCard({ product, index = 0, viewMode = 'grid' }) {
   const { addToCart } = useCart()
   const { toggleWishlist, isWishlisted } = useWishlist()
   const { addToast } = useToast()
@@ -45,7 +45,7 @@ export default function ProductCard({ product, index = 0 }) {
 
   return (
     <motion.div
-      className={styles.card}
+      className={`${styles.card} ${viewMode === 'list' ? styles.listCard : ''}`}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}

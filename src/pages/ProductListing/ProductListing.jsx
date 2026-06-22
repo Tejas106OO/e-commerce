@@ -249,7 +249,7 @@ export default function ProductListing() {
             {filteredProducts.length > 0 ? (
               <div className={`${styles.productGrid} ${viewMode === 'list' ? styles.list : ''}`}>
                 {filteredProducts.map((product, i) => (
-                  <ProductCard key={product.id} product={product} index={i} />
+                  <ProductCard key={product.id} product={product} index={i} viewMode={viewMode} />
                 ))}
               </div>
             ) : (

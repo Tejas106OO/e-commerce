@@ -532,8 +532,8 @@
 }
 
 @media (max-width: 480px) {
-  .productGrid { grid-template-columns: 1fr; max-width: 360px; margin-left: auto; margin-right: auto; }
+  .productGrid { grid-template-columns: repeat(2, 1fr); gap: var(--space-sm); }
   .testimonialGrid { grid-template-columns: 1fr; }
   .heroStats { gap: var(--space-lg); }
-  .dealsProducts { grid-template-columns: 1fr; }
+  .dealsProducts { grid-template-columns: repeat(2, 1fr); gap: var(--space-sm); }
 }

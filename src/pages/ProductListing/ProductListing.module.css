@@ -238,8 +238,7 @@
 
 @media (max-width: 480px) {
   .productGrid {
-    grid-template-columns: 1fr;
-    max-width: 360px;
-    margin: 0 auto;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-sm);
   }
 }
