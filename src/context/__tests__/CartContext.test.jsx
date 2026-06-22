@@ -2,6 +2,7 @@ import React from 'react'
 import { describe, it, expect, beforeEach } from 'vitest'
 import { render, screen, act } from '@testing-library/react'
 import { CartProvider, useCart } from '../CartContext'
+import { ToastProvider } from '../ToastContext'
 
 // Helper component to consume context and render values for testing
 function TestComponent() {
@@ -57,9 +58,11 @@ describe('CartContext', () => {
 
   it('provides empty default cart state', () => {
     render(
-      <CartProvider>
-        <TestComponent />
-      </CartProvider>
+      <ToastProvider>
+        <CartProvider>
+          <TestComponent />
+        </CartProvider>
+      </ToastProvider>
     )
 
     expect(screen.getByTestId('cart-count').textContent).toBe('0')
@@ -68,9 +71,11 @@ describe('CartContext', () => {
 
   it('allows adding items to the cart', async () => {
     render(
-      <CartProvider>
-        <TestComponent />
-      </CartProvider>
+      <ToastProvider>
+        <CartProvider>
+          <TestComponent />
+        </CartProvider>
+      </ToastProvider>
     )
 
     const addButton = screen.getByTestId('btn-add')
@@ -85,9 +90,11 @@ describe('CartContext', () => {
 
   it('handles item quantity updates correctly', async () => {
     render(
-      <CartProvider>
-        <TestComponent />
-      </CartProvider>
+      <ToastProvider>
+        <CartProvider>
+          <TestComponent />
+        </CartProvider>
+      </ToastProvider>
     )
 
     const addButton = screen.getByTestId('btn-add')
@@ -107,9 +114,11 @@ describe('CartContext', () => {
 
   it('allows removing items from the cart', async () => {
     render(
-      <CartProvider>
-        <TestComponent />
-      </CartProvider>
+      <ToastProvider>
+        <CartProvider>
+          <TestComponent />
+        </CartProvider>
+      </ToastProvider>
     )
 
     const addButton = screen.getByTestId('btn-add')

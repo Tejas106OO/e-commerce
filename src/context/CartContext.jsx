@@ -1,4 +1,5 @@
 import { createContext, useContext, useReducer, useEffect } from 'react'
+import { useToast } from './ToastContext'
 
 const CartContext = createContext()
 
@@ -54,10 +55,20 @@ function cartReducer(state, action) {
 
 export function CartProvider({ children }) {
   const [state, dispatch] = useReducer(cartReducer, null, loadCart)
+  const { addToast } = useToast()
+
+  const subtotal = state.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
   }, [state])
+
+  useEffect(() => {
+    if (state.coupon && subtotal < state.coupon.minOrder) {
+      dispatch({ type: 'REMOVE_COUPON' })
+      addToast(`Coupon removed: Minimum order of ₹${state.coupon.minOrder} not met.`, 'info')
+    }
+  }, [subtotal, state.coupon, addToast])
 
   const addToCart = (product, selectedSize, selectedColor, quantity = 1) => {
     dispatch({
@@ -73,7 +84,6 @@ export function CartProvider({ children }) {
   const clearCart = () => dispatch({ type: 'CLEAR_CART' })
 
   const cartCount = state.items.reduce((sum, item) => sum + item.quantity, 0)
-  const subtotal = state.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
 
   let discount = 0
   if (state.coupon) {

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Star, Heart, ShoppingBag, ChevronRight, Minus, Plus, Truck, RotateCcw, Shield, Send, ThumbsUp, CheckCircle } from 'lucide-react'
@@ -23,6 +23,16 @@ export default function ProductDetail() {
   const [selectedSize, setSelectedSize] = useState(product?.sizes?.[0] || null)
   const [quantity, setQuantity] = useState(1)
   const [activeTab, setActiveTab] = useState('description')
+
+  useEffect(() => {
+    if (product) {
+      setSelectedImage(0)
+      setSelectedColor(product.colors?.[0] || null)
+      setSelectedSize(product.sizes?.[0] || null)
+      setQuantity(1)
+      setActiveTab('description')
+    }
+  }, [id, product])
 
   if (!product) {
     return (
@@ -172,8 +182,8 @@ export default function ProductDetail() {
 
             {/* Action Buttons */}
             <div className={styles.actionBtns}>
-              <button className="btn btn-accent btn-lg" onClick={handleAddToCart} id="add-to-cart-btn">
-                <ShoppingBag size={18} /> Add to Cart
+              <button className="btn btn-accent btn-lg" onClick={handleAddToCart} id="add-to-cart-btn" disabled={!product.inStock} style={!product.inStock ? { opacity: 0.6, cursor: 'not-allowed' } : {}}>
+                {product.inStock ? <><ShoppingBag size={18} /> Add to Cart</> : 'Out of Stock'}
               </button>
               <button
                 className={`btn btn-outline btn-lg`}

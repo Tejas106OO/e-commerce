@@ -78,8 +78,8 @@ export default function ProductCard({ product, index = 0 }) {
         </div>
 
         {/* Quick Add */}
-        <button className={styles.quickAdd} onClick={handleAddToCart}>
-          Add to Cart
+        <button className={styles.quickAdd} onClick={handleAddToCart} disabled={!product.inStock} style={!product.inStock ? { opacity: 0.6, cursor: 'not-allowed', transform: 'translateY(0)' } : {}}>
+          {product.inStock ? 'Add to Cart' : 'Out of Stock'}
         </button>
       </div>
 

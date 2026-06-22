@@ -22,12 +22,36 @@ export default function Checkout() {
 
   const validateAddress = () => {
     const errs = {}
+    
     if (!address.name.trim()) errs.name = 'Name is required'
-    if (!address.phone.trim() || address.phone.length < 10) errs.phone = 'Valid phone required'
+    
+    if (!address.phone.trim()) {
+      errs.phone = 'Phone number is required'
+    } else {
+      const cleanPhone = address.phone.replace(/[\s()-]/g, '') // remove common formatting characters
+      const hasCountryCode = cleanPhone.startsWith('+91') || cleanPhone.startsWith('91')
+      const digitsOnly = cleanPhone.replace(/^\+/, '')
+      const isDigits = /^\d+$/.test(digitsOnly)
+      
+      if (!isDigits) {
+        errs.phone = 'Phone number must contain digits only'
+      } else if (hasCountryCode && digitsOnly.length !== 12) {
+        errs.phone = 'Phone number with country code must be 12 digits (+91 followed by 10 digits)'
+      } else if (!hasCountryCode && digitsOnly.length !== 10) {
+        errs.phone = 'Phone number must be exactly 10 digits'
+      }
+    }
+
     if (!address.street.trim()) errs.street = 'Address is required'
     if (!address.city.trim()) errs.city = 'City is required'
     if (!address.state.trim()) errs.state = 'State is required'
-    if (!address.pincode.trim() || address.pincode.length < 6) errs.pincode = 'Valid pincode required'
+    
+    if (!address.pincode.trim()) {
+      errs.pincode = 'Pincode is required'
+    } else if (!/^\d{6}$/.test(address.pincode.trim())) {
+      errs.pincode = 'Pincode must be exactly 6 digits'
+    }
+
     setErrors(errs)
     return Object.keys(errs).length === 0
   }
