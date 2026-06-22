@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Grid3X3, List, SlidersHorizontal, X, ChevronRight, Check } from 'lucide-react'
@@ -16,6 +16,14 @@ export default function ProductListing() {
   const [priceMax, setPriceMax] = useState('')
   const [minRating, setMinRating] = useState(0)
   const [filtersOpen, setFiltersOpen] = useState(false)
+
+  useEffect(() => {
+    setSelectedCategories(category ? [category] : [])
+    setSelectedBrands([])
+    setPriceMin('')
+    setPriceMax('')
+    setMinRating(0)
+  }, [category])
 
   const catObj = category ? categories.find(c => c.id === category) : null
   const pageTitle = catObj ? catObj.name : 'All Products'
@@ -108,8 +116,9 @@ export default function ProductListing() {
             </div>
             <div className={styles.controls}>
               <button
-                className={`btn btn-outline btn-sm ${styles.mobileFilterBtn}`}
+                className="btn btn-outline btn-sm"
                 onClick={() => setFiltersOpen(true)}
+                id="filter-toggle-btn"
               >
                 <SlidersHorizontal size={16} /> Filters
               </button>
@@ -147,15 +156,18 @@ export default function ProductListing() {
 
         {/* Layout */}
         <div className={styles.layout}>
+          {/* Overlay Backdrop */}
+          {filtersOpen && (
+            <div className={styles.overlay} onClick={() => setFiltersOpen(false)} />
+          )}
+
           {/* Sidebar Filters */}
           <aside className={`${styles.sidebar} ${filtersOpen ? styles.open : ''}`}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-lg)' }}>
               <span style={{ fontWeight: 700, fontSize: '1.1rem' }}>Filters</span>
-              {filtersOpen && (
-                <button onClick={() => setFiltersOpen(false)} style={{ display: 'flex' }}>
-                  <X size={20} />
-                </button>
-              )}
+              <button onClick={() => setFiltersOpen(false)} style={{ display: 'flex', cursor: 'pointer', color: 'var(--color-text)' }} aria-label="Close filters">
+                <X size={20} />
+              </button>
             </div>
 
             {hasActiveFilters && (

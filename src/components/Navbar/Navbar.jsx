@@ -76,10 +76,13 @@ export default function Navbar() {
 
   const navItems = [
     { to: '/', label: 'Home' },
-    { to: '/products', label: 'Shop' },
-    { to: '/products/fashion', label: 'Fashion' },
+    { to: '/products/fashion', label: 'Style' },
     { to: '/products/electronics', label: 'Electronics' },
-    { to: '/about', label: 'About' },
+    { to: '/products/home', label: 'Home & Living' },
+    { to: '/products/beauty', label: 'Beauty' },
+    { to: '/products/sports', label: 'Sports' },
+    { to: '/products/books', label: 'Books' },
+    { to: '/about', label: 'Our Story' },
     { to: '/contact', label: 'Contact' },
   ]
 
@@ -97,16 +100,35 @@ export default function Navbar() {
 
           {/* Nav Links */}
           <div className={styles.navLinks}>
-            {navItems.map(item => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.to === '/'}
-                className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}
-              >
-                {item.label}
-              </NavLink>
-            ))}
+            <NavLink to="/" end className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}>
+              Home
+            </NavLink>
+            <NavLink to="/products/fashion" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}>
+              Style
+            </NavLink>
+            <NavLink to="/products/electronics" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}>
+              Electronics
+            </NavLink>
+            
+            <div className={styles.dropdown}>
+              <span className={styles.dropdownLabel}>
+                Collections
+              </span>
+              <div className={styles.dropdownMenu}>
+                <Link to="/products/home" className={styles.dropdownItem}>Home & Living</Link>
+                <Link to="/products/beauty" className={styles.dropdownItem}>Beauty</Link>
+                <Link to="/products/sports" className={styles.dropdownItem}>Sports & Outdoors</Link>
+                <Link to="/products/books" className={styles.dropdownItem}>Books & Literature</Link>
+                <Link to="/products" className={styles.dropdownItem} style={{ borderTop: '1px solid var(--color-border-light)', marginTop: '4px', paddingTop: '8px', fontWeight: 600 }}>Shop All</Link>
+              </div>
+            </div>
+
+            <NavLink to="/about" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}>
+              Our Story
+            </NavLink>
+            <NavLink to="/contact" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}>
+              Contact
+            </NavLink>
           </div>
 
           {/* Search */}
