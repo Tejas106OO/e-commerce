@@ -107,14 +107,6 @@ export default function Checkout() {
     color: step >= s ? '#1a1a2e' : 'var(--color-text-muted)',
     fontWeight: 700, fontSize: '0.85rem'
   })
-  const inputStyle = (field) => ({
-    width: '100%', padding: '0.875rem 1rem',
-    background: 'var(--color-surface)',
-    border: `1.5px solid ${errors[field] ? 'var(--color-error)' : 'var(--color-border)'}`,
-    borderRadius: 'var(--radius-md)', fontSize: '0.95rem',
-    color: 'var(--color-text)', outline: 'none',
-    transition: 'border-color 0.2s'
-  })
 
   return (
     <div style={pageStyle}>
@@ -153,7 +145,8 @@ export default function Checkout() {
                       <div key={f.key} style={{ gridColumn: f.span === 2 ? '1 / -1' : 'auto' }}>
                         <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text-secondary)', marginBottom: '0.25rem' }}>{f.label}</label>
                         <input
-                          style={inputStyle(f.key)}
+                          className="input-field"
+                          style={errors[f.key] ? { borderColor: 'var(--color-error)' } : {}}
                           placeholder={f.ph}
                           value={address[f.key]}
                           onChange={(e) => setAddress({ ...address, [f.key]: e.target.value })}

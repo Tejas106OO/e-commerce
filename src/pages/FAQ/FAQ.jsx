@@ -18,11 +18,11 @@ export default function FAQ() {
 
   return (
     <div style={{ paddingTop: 'calc(var(--navbar-height) + var(--space-2xl))', paddingBottom: 'var(--space-4xl)' }}>
-      <section style={{ background: 'linear-gradient(135deg, #1a1a2e, #0f3460)', color: '#fff', padding: 'var(--space-3xl) 0', marginTop: 'calc(-1 * var(--space-2xl))' }}>
+      <section style={{ background: 'var(--color-bg-secondary)', color: 'var(--color-text)', padding: 'var(--space-3xl) 0', marginTop: 'calc(-1 * var(--space-2xl))', borderBottom: '1px solid var(--color-border-light)' }}>
         <div className="container" style={{ textAlign: 'center' }}>
-          <HelpCircle size={40} style={{ color: 'var(--color-accent)', marginBottom: 'var(--space-md)' }} />
-          <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', marginBottom: 'var(--space-sm)' }}>Frequently Asked Questions</h1>
-          <p style={{ color: 'rgba(255,255,255,0.6)' }}>Everything you need to know about shopping at LUXE</p>
+          <HelpCircle size={40} style={{ color: 'var(--color-accent)', marginBottom: 'var(--space-md)', marginLeft: 'auto', marginRight: 'auto' }} />
+          <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', marginBottom: 'var(--space-sm)', color: 'var(--color-text)' }}>Frequently Asked Questions</h1>
+          <p style={{ color: 'var(--color-text-secondary)' }}>Everything you need to know about shopping at LUXE</p>
         </div>
       </section>
 

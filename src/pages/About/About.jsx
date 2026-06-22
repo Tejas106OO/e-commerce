@@ -12,13 +12,13 @@ export default function About() {
   return (
     <div style={{ paddingTop: 'calc(var(--navbar-height) + var(--space-2xl))', paddingBottom: 'var(--space-4xl)' }}>
       {/* Hero */}
-      <section style={{ background: 'linear-gradient(135deg, #1a1a2e, #0f3460)', color: '#fff', padding: 'var(--space-4xl) 0', marginTop: 'calc(-1 * var(--space-2xl))' }}>
+      <section style={{ background: 'var(--color-bg-secondary)', color: 'var(--color-text)', padding: 'var(--space-4xl) 0', marginTop: 'calc(-1 * var(--space-2xl))', borderBottom: '1px solid var(--color-border-light)' }}>
         <div className="container" style={{ textAlign: 'center', maxWidth: 700 }}>
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
-            <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2rem, 5vw, 3rem)', marginBottom: 'var(--space-lg)' }}>
+            <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2rem, 5vw, 3rem)', marginBottom: 'var(--space-lg)', color: 'var(--color-text)' }}>
               The Art of <span style={{ color: 'var(--color-accent)' }}>Curated Living</span>
             </h1>
-            <p style={{ fontSize: '1.1rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.8 }}>
+            <p style={{ fontSize: '1.05rem', color: 'var(--color-text-secondary)', lineHeight: 1.8 }}>
               Founded in 2020, LUXE began with a simple belief: everyone deserves access to exceptional products
               that elevate everyday life. We're not just a store — we're curators of a premium lifestyle.
             </p>

@@ -26,10 +26,10 @@ export default function Contact() {
 
   return (
     <div className={styles.page}>
-      <section style={{ background: 'linear-gradient(135deg, #1a1a2e, #0f3460)', color: '#fff', padding: 'var(--space-3xl) 0', marginTop: 'calc(-1 * var(--space-2xl))' }}>
+      <section style={{ background: 'var(--color-bg-secondary)', color: 'var(--color-text)', padding: 'var(--space-3xl) 0', marginTop: 'calc(-1 * var(--space-2xl))', borderBottom: '1px solid var(--color-border-light)' }}>
         <div className="container" style={{ textAlign: 'center' }}>
-          <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', marginBottom: 'var(--space-sm)' }}>Get in Touch</h1>
-          <p style={{ color: 'rgba(255,255,255,0.6)' }}>We'd love to hear from you. Send us a message and we'll respond promptly.</p>
+          <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', marginBottom: 'var(--space-sm)', color: 'var(--color-text)' }}>Get in Touch</h1>
+          <p style={{ color: 'var(--color-text-secondary)' }}>We'd love to hear from you. Send us a message and we'll respond promptly.</p>
         </div>
       </section>
 
