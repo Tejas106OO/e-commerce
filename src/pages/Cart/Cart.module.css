@@ -1,0 +1,48 @@
+.page { padding: calc(var(--navbar-height) + var(--space-2xl)) 0 var(--space-4xl); }
+.title { font-family: var(--font-serif); font-size: 2rem; font-weight: 600; margin-bottom: var(--space-2xl); }
+.layout { display: grid; grid-template-columns: 1fr 380px; gap: var(--space-2xl); align-items: start; }
+
+/* Cart Items */
+.itemsList { display: flex; flex-direction: column; gap: var(--space-md); }
+.cartItem { display: flex; gap: var(--space-lg); padding: var(--space-lg); background: var(--color-surface); border: 1px solid var(--color-border-light); border-radius: var(--radius-lg); transition: box-shadow var(--transition-fast); }
+.cartItem:hover { box-shadow: var(--shadow-sm); }
+.itemImage { width: 120px; height: 140px; border-radius: var(--radius-md); overflow: hidden; flex-shrink: 0; }
+.itemImage img { width: 100%; height: 100%; object-fit: cover; }
+.itemInfo { flex: 1; display: flex; flex-direction: column; gap: var(--space-xs); }
+.itemBrand { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-muted); }
+.itemName { font-weight: 600; font-size: 1rem; }
+.itemVariant { font-size: 0.8rem; color: var(--color-text-secondary); }
+.itemBottom { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+.qtyControl { display: flex; align-items: center; border: 1px solid var(--color-border); border-radius: var(--radius-sm); }
+.qtyBtn { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 1rem; transition: background var(--transition-fast); color: var(--color-text); }
+.qtyBtn:hover { background: var(--color-bg-secondary); }
+.qtyNum { width: 36px; text-align: center; font-weight: 600; font-size: 0.9rem; border-left: 1px solid var(--color-border); border-right: 1px solid var(--color-border); }
+.itemPrice { font-weight: 700; font-size: 1rem; }
+.removeBtn { font-size: 0.8rem; color: var(--color-error); font-weight: 500; padding: 0.25rem 0; transition: opacity var(--transition-fast); }
+.removeBtn:hover { opacity: 0.7; }
+
+/* Summary */
+.summary { background: var(--color-surface); border: 1px solid var(--color-border-light); border-radius: var(--radius-lg); padding: var(--space-xl); position: sticky; top: calc(var(--navbar-height) + var(--space-xl)); }
+.summaryTitle { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 600; margin-bottom: var(--space-lg); padding-bottom: var(--space-md); border-bottom: 1px solid var(--color-border-light); }
+.summaryRow { display: flex; justify-content: space-between; padding: 0.5rem 0; font-size: 0.9rem; color: var(--color-text-secondary); }
+.summaryRow.total { font-size: 1.1rem; font-weight: 700; color: var(--color-text); padding-top: var(--space-md); margin-top: var(--space-sm); border-top: 1.5px solid var(--color-border); }
+.discountRow { color: var(--color-success); }
+.freeShipping { color: var(--color-success); font-weight: 600; }
+
+/* Coupon */
+.couponSection { margin-top: var(--space-lg); padding-top: var(--space-md); border-top: 1px solid var(--color-border-light); }
+.couponForm { display: flex; gap: var(--space-sm); }
+.couponInput { flex: 1; padding: 0.625rem 0.875rem; border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: 0.85rem; background: var(--color-bg-secondary); text-transform: uppercase; color: var(--color-text); }
+.couponInput:focus { border-color: var(--color-accent); }
+.couponApplied { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem; background: rgba(16, 185, 129, 0.08); border-radius: var(--radius-md); margin-top: var(--space-sm); }
+.couponName { font-size: 0.85rem; font-weight: 600; color: var(--color-success); }
+.couponRemove { font-size: 0.8rem; color: var(--color-error); cursor: pointer; }
+
+/* Empty */
+.empty { text-align: center; padding: var(--space-4xl); }
+.emptyIcon { font-size: 4rem; margin-bottom: var(--space-lg); opacity: 0.3; }
+.emptyTitle { font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: var(--space-sm); }
+.emptyText { color: var(--color-text-secondary); margin-bottom: var(--space-xl); }
+
+@media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } .summary { position: static; } }
+@media (max-width: 600px) { .cartItem { flex-direction: column; } .itemImage { width: 100%; height: 200px; } }

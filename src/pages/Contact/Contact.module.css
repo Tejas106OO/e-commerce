@@ -1,0 +1,23 @@
+.page {
+  padding: calc(var(--navbar-height) + var(--space-2xl)) 0 var(--space-4xl);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: var(--space-3xl);
+  align-items: start;
+  maxWidth: 900px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding-top: calc(var(--navbar-height) + var(--space-lg));
+  }
+
+  .layout {
+    grid-template-columns: 1fr;
+    gap: var(--space-2xl);
+  }
+}
