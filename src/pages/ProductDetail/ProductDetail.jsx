@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Star, Heart, ShoppingBag, ChevronRight, Minus, Plus, Truck, RotateCcw, Shield, Send, ThumbsUp, CheckCircle } from 'lucide-react'
@@ -24,7 +24,13 @@ export default function ProductDetail() {
   const [quantity, setQuantity] = useState(1)
   const [activeTab, setActiveTab] = useState('description')
 
+  // Scroll to top whenever the product changes
+  const prevIdRef = useRef(null)
   useEffect(() => {
+    if (prevIdRef.current !== id) {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      prevIdRef.current = id
+    }
     if (product) {
       setSelectedImage(0)
       setSelectedColor(product.colors?.[0] || null)
@@ -219,13 +225,13 @@ export default function ProductDetail() {
             </div>
 
             {/* Trust */}
-            <div style={{ display: 'flex', gap: 'var(--space-xl)', padding: 'var(--space-lg) 0', borderTop: '1px solid var(--color-border-light)', marginTop: 'var(--space-sm)' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-lg)', padding: 'var(--space-lg) 0', borderTop: '1px solid var(--color-border-light)', marginTop: 'var(--space-sm)' }}>
               {[
                 { icon: <Truck size={18} />, text: 'Free Delivery' },
                 { icon: <RotateCcw size={18} />, text: '30-Day Returns' },
                 { icon: <Shield size={18} />, text: 'Secure Payment' },
               ].map((item, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-xs)', fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-xs)', fontSize: '0.8rem', color: 'var(--color-text-secondary)', whiteSpace: 'nowrap' }}>
                   <span style={{ color: 'var(--color-accent)' }}>{item.icon}</span>
                   {item.text}
                 </div>

@@ -21,9 +21,11 @@ export default function ProductListing() {
 
   useEffect(() => {
     setCurrentPage(1)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [selectedCategories, selectedBrands, priceMin, priceMax, minRating, sortBy, category])
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' })
     setSelectedCategories(category ? [category] : [])
     setSelectedBrands([])
     setPriceMin('')

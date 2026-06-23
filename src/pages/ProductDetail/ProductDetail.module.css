@@ -330,6 +330,7 @@
 @media (max-width: 1024px) {
     .productLayout {
         grid-template-columns: 1fr;
+        gap: var(--space-2xl);
     }
 
     .gallery {
@@ -341,21 +342,62 @@
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
+    .page {
+        padding-top: calc(var(--navbar-height) + var(--space-lg));
+    }
+
     .name {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
     }
 
     .currentPrice {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
+    }
+
+    .thumbnails {
+        overflow-x: auto;
+        padding-bottom: var(--space-xs);
+        flex-wrap: nowrap;
+    }
+
+    .thumb {
+        flex-shrink: 0;
+    }
+
+    .tabs {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+    }
+
+    .tab {
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 480px) {
+    .name {
+        font-size: 1.35rem;
+    }
+
+    .currentPrice {
+        font-size: 1.35rem;
     }
 
     .actionBtns {
         flex-direction: column;
     }
 
+    .actionBtns .btn {
+        width: 100%;
+    }
+
     .relatedGrid {
         grid-template-columns: repeat(2, 1fr);
         gap: var(--space-sm);
+    }
+
+    .specTable td:first-child {
+        width: 120px;
     }
 }
