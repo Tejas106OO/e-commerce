@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Search, ShoppingBag, Heart, User, Sun, Moon, Menu, X, LayoutDashboard, Store } from 'lucide-react'
 import { useCart } from '../../context/CartContext'
@@ -19,10 +19,16 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const searchRef = useRef(null)
   const navigate = useNavigate()
+  const location = useLocation()
   const { cartCount } = useCart()
   const { wishlistCount } = useWishlist()
   const { darkMode, toggleTheme } = useTheme()
   const { user } = useAuth()
+
+  useEffect(() => {
+    setMobileOpen(false)
+  }, [location])
+
   // Debounce: only filter results 300ms after the user stops typing
   const debouncedQuery = useDebounce(searchQuery, 300)
 
@@ -159,7 +165,12 @@ export default function Navbar() {
                       className={styles.searchItem}
                       onClick={() => handleResultClick(product.id)}
                     >
-                      <img src={product.image} alt={product.name} className={styles.searchItemImage} />
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className={styles.searchItemImage}
+                        onError={(e) => { e.target.onerror = null; e.target.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='800' viewBox='0 0 600 800'><rect width='100%' height='100%' fill='%23eaeaea'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='36' fill='%23a3a3a3' letter-spacing='4'>LUXE</text></svg>" }}
+                      />
                       <div className={styles.searchItemInfo}>
                         <div className={styles.searchItemName}>{product.name}</div>
                         <div className={styles.searchItemPrice}>{formatPrice(product.price)}</div>
@@ -257,6 +268,20 @@ export default function Navbar() {
                 {item.label}
               </Link>
             ))}
+            {adminLink && (
+              <Link to={adminLink.to} className={styles.mobileNavLink} onClick={() => setMobileOpen(false)}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  {adminLink.icon} {adminLink.label}
+                </span>
+              </Link>
+            )}
+            {sellerLink && !adminLink && (
+              <Link to={sellerLink.to} className={styles.mobileNavLink} onClick={() => setMobileOpen(false)}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  {sellerLink.icon} {sellerLink.label}
+                </span>
+              </Link>
+            )}
             <div className={styles.mobileDivider} />
             <Link to="/wishlist" className={styles.mobileNavLink} onClick={() => setMobileOpen(false)}>
               <Heart size={18} /> Wishlist {wishlistCount > 0 && `(${wishlistCount})`}

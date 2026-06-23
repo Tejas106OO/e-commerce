@@ -1,14 +1,23 @@
 import { useEffect, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { CheckCircle, Package, ArrowRight } from 'lucide-react'
 import { formatPrice, getDeliveryDate } from '../../utils/helpers'
 
 export default function OrderSuccess() {
   const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
   const orderId = searchParams.get('orderId') || 'LX-2025-00001'
   const total = searchParams.get('total') || 0
   const [confetti, setConfetti] = useState(true)
+
+  // SSR-safe state initialization for window dimensions
+  const [dimensions] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return { width: window.innerWidth, height: window.innerHeight }
+    }
+    return { width: 800, height: 600 }
+  })
 
   useEffect(() => {
     const timer = setTimeout(() => setConfetti(false), 3000)
@@ -24,8 +33,8 @@ export default function OrderSuccess() {
             {Array.from({ length: 50 }, (_, i) => (
               <motion.div
                 key={i}
-                initial={{ y: -20, x: Math.random() * window.innerWidth, opacity: 1, rotate: 0 }}
-                animate={{ y: window.innerHeight + 100, rotate: 360 * (Math.random() > 0.5 ? 1 : -1), opacity: 0 }}
+                initial={{ y: -20, x: Math.random() * dimensions.width, opacity: 1, rotate: 0 }}
+                animate={{ y: dimensions.height + 100, rotate: 360 * (Math.random() > 0.5 ? 1 : -1), opacity: 0 }}
                 transition={{ duration: 2 + Math.random() * 2, delay: Math.random() * 0.5, ease: 'easeIn' }}
                 style={{
                   position: 'absolute',
@@ -88,10 +97,10 @@ export default function OrderSuccess() {
           </div>
 
           <div style={{ display: 'flex', gap: 'var(--space-md)', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link to="/account" className="btn btn-outline">
+            <button onClick={() => navigate(`/account?tab=orders&highlight=${orderId}`)} className="btn btn-outline" aria-label="Track newly placed order">
               Track Order
-            </Link>
-            <Link to="/products" className="btn btn-accent">
+            </button>
+            <Link to="/products" className="btn btn-accent" aria-label="Continue shopping">
               Continue Shopping <ArrowRight size={16} />
             </Link>
           </div>

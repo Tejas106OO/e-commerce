@@ -113,6 +113,21 @@ export default function Seller() {
 
       {/* Main Content */}
       <main className={styles.main}>
+        {/* Mobile Tab Bar */}
+        <div className={styles.mobileNav}>
+          {TABS.map(({ id, label, icon: Icon }) => (
+            <button
+              key={id}
+              className={`${styles.mobileTabBtn} ${tab === id ? styles.mobileActive : ''}`}
+              onClick={() => setTab(id)}
+              aria-label={`Switch to ${label} tab`}
+            >
+              <Icon size={16} />
+              <span>{label}</span>
+            </button>
+          ))}
+        </div>
+
         <AnimatePresence mode="wait">
           <motion.div key={tab} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }}>
 
@@ -159,7 +174,12 @@ export default function Seller() {
                     {SELLER_PRODUCTS.slice(0, 4).map((p, i) => (
                       <div key={p.id} className={styles.productPreview}>
                         <span className={styles.rank}>#{i + 1}</span>
-                        <img src={p.image} alt={p.name} className={styles.thumb} />
+                        <img
+                          src={p.image}
+                          alt={p.name}
+                          className={styles.thumb}
+                          onError={(e) => { e.target.onerror = null; e.target.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='800' viewBox='0 0 600 800'><rect width='100%' height='100%' fill='%23eaeaea'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='36' fill='%23a3a3a3' letter-spacing='4'>LUXE</text></svg>" }}
+                        />
                         <div className={styles.pInfo}>
                           <div className={styles.pName}>{p.name}</div>
                           <div className={styles.pMeta}>⭐ {p.rating} · {formatPrice(p.price)}</div>
@@ -184,7 +204,12 @@ export default function Seller() {
                   {SELLER_PRODUCTS.map(p => (
                     <motion.div key={p.id} className={styles.productCard} whileHover={{ y: -4 }}>
                       <div className={styles.productImageWrap}>
-                        <img src={p.image} alt={p.name} className={styles.productImage} />
+                        <img
+                          src={p.image}
+                          alt={p.name}
+                          className={styles.productImage}
+                          onError={(e) => { e.target.onerror = null; e.target.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='800' viewBox='0 0 600 800'><rect width='100%' height='100%' fill='%23eaeaea'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='36' fill='%23a3a3a3' letter-spacing='4'>LUXE</text></svg>" }}
+                        />
                         <div className={`${styles.activePill} ${activeProducts[p.id] ? styles.on : styles.off}`}>
                           {activeProducts[p.id] ? 'Active' : 'Inactive'}
                         </div>

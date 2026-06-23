@@ -1,20 +1,58 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState, useEffect, useRef } from 'react'
+import { useAuth } from './AuthContext'
 
 const WishlistContext = createContext()
 
-const STORAGE_KEY = 'luxe_wishlist'
+function getInitialWishlist() {
+  let initialUserId = 'guest'
+  try {
+    const authData = localStorage.getItem('luxe_auth')
+    if (authData) {
+      const parsedAuth = JSON.parse(authData)
+      if (parsedAuth && parsedAuth.id) {
+        initialUserId = parsedAuth.id
+      }
+    }
+  } catch {}
+  
+  const key = `luxe_wishlist_${initialUserId}`
+  try {
+    const data = localStorage.getItem(key)
+    return data ? JSON.parse(data) : []
+  } catch {
+    return []
+  }
+}
 
 export function WishlistProvider({ children }) {
-  const [items, setItems] = useState(() => {
-    try {
-      const data = localStorage.getItem(STORAGE_KEY)
-      return data ? JSON.parse(data) : []
-    } catch { return [] }
-  })
+  let auth = null
+  try {
+    auth = useAuth()
+  } catch {}
+  const user = auth?.user
+  const userId = user?.id || 'guest'
+  const [items, setItems] = useState(getInitialWishlist)
+  const loadedUserIdRef = useRef(userId)
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
-  }, [items])
+    const key = `luxe_wishlist_${userId}`
+    let initialItems = []
+    try {
+      const data = localStorage.getItem(key)
+      if (data) {
+        initialItems = JSON.parse(data)
+      }
+    } catch {}
+    setItems(initialItems)
+    loadedUserIdRef.current = userId
+  }, [userId])
+
+  useEffect(() => {
+    if (loadedUserIdRef.current === userId) {
+      const key = `luxe_wishlist_${userId}`
+      localStorage.setItem(key, JSON.stringify(items))
+    }
+  }, [items, userId])
 
   const toggleWishlist = (product) => {
     setItems(prev => {

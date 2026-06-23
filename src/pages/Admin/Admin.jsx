@@ -193,7 +193,12 @@ export default function Admin() {
                   {products.filter(p => p.featured).slice(0, 5).map((p, i) => (
                     <div key={p.id} className={styles.productRow}>
                       <div className={styles.productRank}>#{i + 1}</div>
-                      <img src={p.image} alt={p.name} className={styles.productThumb} />
+                      <img
+                        src={p.image}
+                        alt={p.name}
+                        className={styles.productThumb}
+                        onError={(e) => { e.target.onerror = null; e.target.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='800' viewBox='0 0 600 800'><rect width='100%' height='100%' fill='%23eaeaea'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='36' fill='%23a3a3a3' letter-spacing='4'>LUXE</text></svg>" }}
+                      />
                       <div className={styles.productInfo}>
                         <div className={styles.productName}>{p.name}</div>
                         <div className={styles.productMeta}>{p.category} · ⭐ {p.rating}</div>
@@ -281,7 +286,12 @@ export default function Admin() {
                       <tr key={p.id}>
                         <td>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                            <img src={p.image} alt={p.name} style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 8 }} />
+                            <img
+                              src={p.image}
+                              alt={p.name}
+                              style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 8 }}
+                              onError={(e) => { e.target.onerror = null; e.target.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='800' viewBox='0 0 600 800'><rect width='100%' height='100%' fill='%23eaeaea'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='36' fill='%23a3a3a3' letter-spacing='4'>LUXE</text></svg>" }}
+                            />
                             <span className={styles.productNameTd}>{p.name}</span>
                           </div>
                         </td>

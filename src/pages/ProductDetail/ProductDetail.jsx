@@ -83,7 +83,11 @@ export default function ProductDetail() {
             transition={{ duration: 0.5 }}
           >
             <div className={styles.mainImage}>
-              <img src={allImages[selectedImage]} alt={product.name} />
+              <img
+                src={allImages[selectedImage]}
+                alt={product.name}
+                onError={(e) => { e.target.onerror = null; e.target.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='800' viewBox='0 0 600 800'><rect width='100%' height='100%' fill='%23eaeaea'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='36' fill='%23a3a3a3' letter-spacing='4'>LUXE</text></svg>" }}
+              />
             </div>
             {allImages.length > 1 && (
               <div className={styles.thumbnails}>
@@ -93,7 +97,11 @@ export default function ProductDetail() {
                     className={`${styles.thumb} ${selectedImage === i ? styles.active : ''}`}
                     onClick={() => setSelectedImage(i)}
                   >
-                    <img src={img} alt={`View ${i + 1}`} />
+                    <img
+                      src={img}
+                      alt={`View ${i + 1}`}
+                      onError={(e) => { e.target.onerror = null; e.target.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='800' viewBox='0 0 600 800'><rect width='100%' height='100%' fill='%23eaeaea'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='36' fill='%23a3a3a3' letter-spacing='4'>LUXE</text></svg>" }}
+                    />
                   </button>
                 ))}
               </div>
@@ -168,14 +176,29 @@ export default function ProductDetail() {
               </div>
             )}
 
-            {/* Quantity */}
             <div className={styles.quantityRow}>
               <div className={styles.variantSection}>
                 <span className={styles.variantLabel}>Quantity</span>
                 <div className={styles.quantityControl}>
-                  <button className={styles.qtyBtn} onClick={() => setQuantity(q => Math.max(1, q - 1))}><Minus size={16} /></button>
+                  <button 
+                    className={styles.qtyBtn} 
+                    onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                    disabled={quantity <= 1 || !product.inStock}
+                    style={quantity <= 1 || !product.inStock ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+                    aria-label="Decrease quantity"
+                  >
+                    <Minus size={16} />
+                  </button>
                   <span className={styles.qtyNum}>{quantity}</span>
-                  <button className={styles.qtyBtn} onClick={() => setQuantity(q => Math.min(10, q + 1))}><Plus size={16} /></button>
+                  <button 
+                    className={styles.qtyBtn} 
+                    onClick={() => setQuantity(q => Math.min(10, q + 1))}
+                    disabled={quantity >= 10 || !product.inStock}
+                    style={quantity >= 10 || !product.inStock ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+                    aria-label="Increase quantity"
+                  >
+                    <Plus size={16} />
+                  </button>
                 </div>
               </div>
             </div>

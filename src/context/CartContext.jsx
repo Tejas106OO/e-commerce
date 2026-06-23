@@ -1,19 +1,34 @@
-import { createContext, useContext, useReducer, useEffect } from 'react'
+import { createContext, useContext, useReducer, useEffect, useRef } from 'react'
 import { useToast } from './ToastContext'
+import { useAuth } from './AuthContext'
 
 const CartContext = createContext()
 
-const STORAGE_KEY = 'luxe_cart'
-
-function loadCart() {
+function getInitialCart() {
+  let initialUserId = 'guest'
   try {
-    const data = localStorage.getItem(STORAGE_KEY)
+    const authData = localStorage.getItem('luxe_auth')
+    if (authData) {
+      const parsedAuth = JSON.parse(authData)
+      if (parsedAuth && parsedAuth.id) {
+        initialUserId = parsedAuth.id
+      }
+    }
+  } catch {}
+  
+  const key = `luxe_cart_${initialUserId}`
+  try {
+    const data = localStorage.getItem(key)
     return data ? JSON.parse(data) : { items: [], coupon: null }
-  } catch { return { items: [], coupon: null } }
+  } catch {
+    return { items: [], coupon: null }
+  }
 }
 
 function cartReducer(state, action) {
   switch (action.type) {
+    case 'LOAD_CART':
+      return action.payload
     case 'ADD_ITEM': {
       const existing = state.items.find(
         i => i.id === action.payload.id && i.selectedSize === action.payload.selectedSize && i.selectedColor === action.payload.selectedColor
@@ -54,14 +69,39 @@ function cartReducer(state, action) {
 }
 
 export function CartProvider({ children }) {
-  const [state, dispatch] = useReducer(cartReducer, null, loadCart)
+  const [state, dispatch] = useReducer(cartReducer, null, getInitialCart)
   const { addToast } = useToast()
+  
+  let auth = null
+  try {
+    auth = useAuth()
+  } catch {}
+  const user = auth?.user
+  
+  const userId = user?.id || 'guest'
+  const loadedUserIdRef = useRef(userId)
 
   const subtotal = state.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
-  }, [state])
+    const key = `luxe_cart_${userId}`
+    let initialCart = { items: [], coupon: null }
+    try {
+      const data = localStorage.getItem(key)
+      if (data) {
+        initialCart = JSON.parse(data)
+      }
+    } catch {}
+    dispatch({ type: 'LOAD_CART', payload: initialCart })
+    loadedUserIdRef.current = userId
+  }, [userId])
+
+  useEffect(() => {
+    if (state && loadedUserIdRef.current === userId) {
+      const key = `luxe_cart_${userId}`
+      localStorage.setItem(key, JSON.stringify(state))
+    }
+  }, [state, userId])
 
   useEffect(() => {
     if (state.coupon && subtotal < state.coupon.minOrder) {

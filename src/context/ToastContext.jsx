@@ -11,7 +11,13 @@ export function ToastProvider({ children }) {
 
   const addToast = useCallback((message, type = 'success', duration = 3000) => {
     const id = ++toastId
-    setToasts(prev => [...prev, { id, message, type }])
+    setToasts(prev => {
+      const next = [...prev, { id, message, type }]
+      if (next.length > 4) {
+        return next.slice(next.length - 4)
+      }
+      return next
+    })
     setTimeout(() => {
       setToasts(prev => prev.filter(t => t.id !== id))
     }, duration)

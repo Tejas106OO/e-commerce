@@ -28,6 +28,9 @@ import FAQ from './pages/FAQ/FAQ'
 import NotFound from './pages/NotFound/NotFound'
 import Admin from './pages/Admin/Admin'
 import Seller from './pages/Seller/Seller'
+import ProtectedRoute from './components/ProtectedRoute'
+import Privacy from './pages/Privacy/Privacy'
+import Terms from './pages/Terms/Terms'
 
 export default function App() {
   return (
@@ -46,16 +49,38 @@ export default function App() {
                       <Route path="/products/:category" element={<ProductListing />} />
                       <Route path="/product/:id" element={<ProductDetail />} />
                       <Route path="/cart" element={<Cart />} />
-                      <Route path="/checkout" element={<Checkout />} />
-                      <Route path="/order-success" element={<OrderSuccess />} />
+                      <Route path="/checkout" element={
+                        <ProtectedRoute>
+                          <Checkout />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/order-success" element={
+                        <ProtectedRoute>
+                          <OrderSuccess />
+                        </ProtectedRoute>
+                      } />
                       <Route path="/account" element={<Account />} />
-                      <Route path="/wishlist" element={<Wishlist />} />
+                      <Route path="/wishlist" element={
+                        <ProtectedRoute>
+                          <Wishlist />
+                        </ProtectedRoute>
+                      } />
                       <Route path="/search" element={<Search />} />
                       <Route path="/about" element={<About />} />
                       <Route path="/contact" element={<Contact />} />
                       <Route path="/faq"            element={<FAQ />} />
-                      <Route path="/admin"          element={<Admin />} />
-                      <Route path="/seller"         element={<Seller />} />
+                      <Route path="/privacy"        element={<Privacy />} />
+                      <Route path="/terms"          element={<Terms />} />
+                      <Route path="/admin"          element={
+                        <ProtectedRoute requiredRole="admin">
+                          <Admin />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/seller"         element={
+                        <ProtectedRoute requiredRole="seller">
+                          <Seller />
+                        </ProtectedRoute>
+                      } />
                       <Route path="*"               element={<NotFound />} />
                     </Routes>
                   </main>

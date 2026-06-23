@@ -9,6 +9,7 @@ import styles from './Contact.module.css'
 export default function Contact() {
   const { addToast } = useToast()
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
+  const [sending, setSending] = useState(false)
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -18,10 +19,13 @@ export default function Contact() {
       subject: sanitizeInput(form.subject),
       message: sanitizeInput(form.message)
     }
-    // Simulate sending message to backend
-    console.log('Sanitized contact form data:', sanitizedForm)
-    addToast('Message sent successfully! We\'ll get back to you soon.', 'success')
-    setForm({ name: '', email: '', subject: '', message: '' })
+    
+    setSending(true)
+    setTimeout(() => {
+      setSending(false)
+      addToast('Message sent successfully! We\'ll get back to you soon.', 'success')
+      setForm({ name: '', email: '', subject: '', message: '' })
+    }, 1200)
   }
 
   return (
@@ -77,8 +81,8 @@ export default function Contact() {
                   <label className="input-label">Message</label>
                   <textarea className="input-field" rows={5} placeholder="Your message..." value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} required style={{ resize: 'vertical' }} id="contact-message" />
                 </div>
-                <button type="submit" className="btn btn-accent btn-lg" id="contact-submit">
-                  <Send size={16} /> Send Message
+                <button type="submit" className="btn btn-accent btn-lg" id="contact-submit" disabled={sending}>
+                  {sending ? '⏳ Sending Message...' : <><Send size={16} /> Send Message</>}
                 </button>
               </form>
             </motion.div>

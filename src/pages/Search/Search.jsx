@@ -43,7 +43,7 @@ export default function Search() {
           ) : (
             <div style={{ textAlign: 'center', padding: 'var(--space-4xl) 0' }}>
               <SearchIcon size={48} style={{ color: 'var(--color-text-muted)', marginBottom: 'var(--space-lg)', opacity: 0.3 }} />
-              <h3 style={{ fontFamily: 'var(--font-serif)', marginBottom: 'var(--space-sm)' }}>No results found</h3>
+              <h3 style={{ fontFamily: 'var(--font-serif)', marginBottom: 'var(--space-sm)' }}>No results found for "{sanitizedQuery}"</h3>
               <p style={{ color: 'var(--color-text-secondary)', marginBottom: 'var(--space-xl)' }}>
                 Try different keywords or browse our collections.
               </p>

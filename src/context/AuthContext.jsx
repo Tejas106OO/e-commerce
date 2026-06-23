@@ -24,6 +24,10 @@ export function AuthProvider({ children }) {
    *   setUser(user)
    */
   const login = (email, password, role = 'customer') => {
+    if (!password || password.trim().length === 0) {
+      return { success: false, error: 'Password is required' }
+    }
+    
     // Demo role switching: type "admin@luxe.com" to get admin, "seller@luxe.com" for seller
     const derivedRole =
       email.includes('admin') ? 'admin' :
@@ -46,10 +50,17 @@ export function AuthProvider({ children }) {
       ]
     }
     setUser(mockUser)
-    return true
+    return { success: true }
   }
 
   const register = (name, email, password, role = 'customer') => {
+    if (!name || name.trim().length < 2) {
+      return { success: false, error: 'Name must be at least 2 characters' }
+    }
+    if (!password || password.trim().length < 6) {
+      return { success: false, error: 'Password must be at least 6 characters' }
+    }
+
     const newUser = {
       id: Date.now(),
       name,
@@ -60,16 +71,27 @@ export function AuthProvider({ children }) {
       orders: []
     }
     setUser(newUser)
-    return true
+    return { success: true }
   }
 
-  const logout = () => setUser(null)
+  const updateProfile = (updates) => {
+    setUser(prev => {
+      if (!prev) return null
+      return { ...prev, ...updates }
+    })
+  }
+
+  const logout = () => {
+    localStorage.removeItem('luxe_cart')
+    localStorage.removeItem('luxe_wishlist')
+    setUser(null)
+  }
   const isAuthenticated = !!user
   const isAdmin = user?.role === 'admin'
   const isSeller = user?.role === 'seller' || user?.role === 'admin'
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, isAuthenticated, isAdmin, isSeller }}>
+    <AuthContext.Provider value={{ user, login, register, logout, updateProfile, isAuthenticated, isAdmin, isSeller }}>
       {children}
     </AuthContext.Provider>
   )

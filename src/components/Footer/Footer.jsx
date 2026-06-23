@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { MapPin, Phone, Mail } from 'lucide-react'
+import { MapPin, Phone, Mail, Instagram, Twitter, Facebook, Link2 } from 'lucide-react'
 import styles from './Footer.module.css'
 
 export default function Footer() {
@@ -15,10 +15,18 @@ export default function Footer() {
               bringing you the finest from around the world.
             </p>
             <div className={styles.footerSocials}>
-              <a href="#" className={styles.socialIcon} aria-label="Instagram">IG</a>
-              <a href="#" className={styles.socialIcon} aria-label="Twitter">TW</a>
-              <a href="#" className={styles.socialIcon} aria-label="Facebook">FB</a>
-              <a href="#" className={styles.socialIcon} aria-label="Pinterest">PI</a>
+              <a href="https://instagram.com" className={styles.socialIcon} aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+                <Instagram size={18} />
+              </a>
+              <a href="https://twitter.com" className={styles.socialIcon} aria-label="Twitter" target="_blank" rel="noopener noreferrer">
+                <Twitter size={18} />
+              </a>
+              <a href="https://facebook.com" className={styles.socialIcon} aria-label="Facebook" target="_blank" rel="noopener noreferrer">
+                <Facebook size={18} />
+              </a>
+              <a href="https://pinterest.com" className={styles.socialIcon} aria-label="Pinterest" target="_blank" rel="noopener noreferrer">
+                <Link2 size={18} />
+              </a>
             </div>
           </div>
 

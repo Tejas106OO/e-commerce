@@ -1,24 +1,47 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { MapPin, CreditCard, Check, ChevronRight } from 'lucide-react'
 import { useCart } from '../../context/CartContext'
 import { useToast } from '../../context/ToastContext'
 import { useAuth } from '../../context/AuthContext'
-import { formatPrice, generateOrderId } from '../../utils/helpers'
+import { formatPrice, generateOrderId, INDIAN_STATES } from '../../utils/helpers'
 import { sanitizeInput } from '../../utils/sanitize'
-import { openRazorpayCheckout } from '../../utils/razorpay'
-
+import styles from './Checkout.module.css'
 
 export default function Checkout() {
   const navigate = useNavigate()
-  const { items, subtotal, discount, shipping, tax, total, clearCart, cartCount } = useCart()
+  const { items, subtotal, discount, shipping, tax, total, clearCart } = useCart()
   const { addToast } = useToast()
   const { user } = useAuth()
+  
   const [step, setStep] = useState(1)
-  const [address, setAddress] = useState({ name: '', phone: '', street: '', city: '', state: '', pincode: '' })
+  
+  // Prefill shipping address with user's default address if available
+  const defaultAddr = user?.addresses?.find(a => a.isDefault) || user?.addresses?.[0]
+  
+  const [address, setAddress] = useState({
+    name: defaultAddr?.name || user?.name || '',
+    phone: defaultAddr?.phone || user?.phone || '',
+    street: defaultAddr?.street || '',
+    city: defaultAddr?.city || '',
+    state: defaultAddr?.state || '',
+    pincode: defaultAddr?.pincode || ''
+  })
+  
   const [errors, setErrors] = useState({})
   const [paymentProcessing, setPaymentProcessing] = useState(false)
+
+  // Empty cart redirect guard
+  useEffect(() => {
+    if (items.length === 0) {
+      navigate('/cart')
+    }
+  }, [items, navigate])
+
+  if (items.length === 0) {
+    return null
+  }
 
   const validateAddress = () => {
     const errs = {}
@@ -28,7 +51,7 @@ export default function Checkout() {
     if (!address.phone.trim()) {
       errs.phone = 'Phone number is required'
     } else {
-      const cleanPhone = address.phone.replace(/[\s()-]/g, '') // remove common formatting characters
+      const cleanPhone = address.phone.replace(/[\s()-]/g, '')
       const hasCountryCode = cleanPhone.startsWith('+91') || cleanPhone.startsWith('91')
       const digitsOnly = cleanPhone.replace(/^\+/, '')
       const isDigits = /^\d+$/.test(digitsOnly)
@@ -75,47 +98,31 @@ export default function Checkout() {
   const handlePayment = async () => {
     setPaymentProcessing(true)
     try {
-      /**
-       * PRODUCTION: Uncomment the block below and remove the mock section.
-       * This calls your backend to create a Razorpay order, then opens the checkout modal.
-       *
-       * const res = await fetch('/api/payments/create-order', {
-       *   method: 'POST',
-       *   headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-       *   body: JSON.stringify({ order_id: localOrderId }),
-       * })
-       * const { razorpay_order_id, amount, key_id } = await res.json()
-       * await openRazorpayCheckout({
-       *   amount, orderId: razorpay_order_id,
-       *   name: user?.name, email: user?.email, contact: user?.phone,
-       *   onSuccess: async ({ razorpay_payment_id, razorpay_order_id: rpOrderId, razorpay_signature }) => {
-       *     // Verify on backend
-       *     await fetch('/api/payments/verify', { method: 'POST', ... })
-       *     clearCart()
-       *     navigate(`/order-success?orderId=${localOrderId}&total=${total}`)
-       *   },
-       *   onFailure: (msg) => addToast(msg, 'error')
-       * })
-       */
-
-      // ── DEMO (no backend) ─────────────────────────────────────────────────
       const orderId = generateOrderId()
-      // Simulate Razorpay opening delay
+      // Simulate gateway delay
       await new Promise(r => setTimeout(r, 1200))
+      
+      // Save order to user profile in memory if user is logged in
+      if (user) {
+        const newOrder = {
+          id: orderId,
+          date: new Date().toISOString().split('T')[0],
+          total: total,
+          status: 'processing',
+          items: items.length
+        }
+        const updatedOrders = [newOrder, ...(user.orders || [])]
+        updateProfile({ orders: updatedOrders })
+      }
+
       addToast('✅ Payment successful! Order confirmed.', 'success')
       clearCart()
       navigate(`/order-success?orderId=${orderId}&total=${total}`)
-      // ─────────────────────────────────────────────────────────────────────
     } catch (err) {
       addToast('Payment failed. Please try again.', 'error')
     } finally {
       setPaymentProcessing(false)
     }
-  }
-
-  if (items.length === 0) {
-    navigate('/cart')
-    return null
   }
 
   const pageStyle = { paddingTop: 'calc(var(--navbar-height) + var(--space-2xl))', paddingBottom: 'var(--space-4xl)' }
@@ -148,7 +155,7 @@ export default function Checkout() {
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 'var(--space-2xl)', alignItems: 'start' }}>
+        <div className={styles.checkoutLayout}>
           {/* Form */}
           <div>
             {step === 1 && (
@@ -163,19 +170,34 @@ export default function Checkout() {
                       { key: 'phone', label: 'Phone Number', ph: '+91 98765 43210', span: 1 },
                       { key: 'street', label: 'Street Address', ph: '42, MG Road, Indiranagar', span: 2 },
                       { key: 'city', label: 'City', ph: 'Bangalore', span: 1 },
-                      { key: 'state', label: 'State', ph: 'Karnataka', span: 1 },
+                      { key: 'state', label: 'State / UT', ph: 'Select State', span: 1, type: 'select' },
                       { key: 'pincode', label: 'Pincode', ph: '560038', span: 2 },
                     ].map(f => (
                       <div key={f.key} style={{ gridColumn: f.span === 2 ? '1 / -1' : 'auto' }}>
-                        <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text-secondary)', marginBottom: '0.25rem' }}>{f.label}</label>
-                        <input
-                          className="input-field"
-                          style={errors[f.key] ? { borderColor: 'var(--color-error)' } : {}}
-                          placeholder={f.ph}
-                          value={address[f.key]}
-                          onChange={(e) => setAddress({ ...address, [f.key]: e.target.value })}
-                          id={`checkout-${f.key}`}
-                        />
+                        <label htmlFor={`checkout-${f.key}`} style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text-secondary)', marginBottom: '0.25rem' }}>{f.label}</label>
+                        {f.type === 'select' ? (
+                          <select
+                            id={`checkout-${f.key}`}
+                            className="input-field"
+                            style={errors[f.key] ? { borderColor: 'var(--color-error)' } : {}}
+                            value={address[f.key]}
+                            onChange={(e) => setAddress({ ...address, [f.key]: e.target.value })}
+                          >
+                            <option value="">Select State / UT</option>
+                            {INDIAN_STATES.map(s => (
+                              <option key={s} value={s}>{s}</option>
+                            ))}
+                          </select>
+                        ) : (
+                          <input
+                            className="input-field"
+                            style={errors[f.key] ? { borderColor: 'var(--color-error)' } : {}}
+                            placeholder={f.ph}
+                            value={address[f.key]}
+                            onChange={(e) => setAddress({ ...address, [f.key]: e.target.value })}
+                            id={`checkout-${f.key}`}
+                          />
+                        )}
                         {errors[f.key] && <span style={{ fontSize: '0.75rem', color: 'var(--color-error)' }}>{errors[f.key]}</span>}
                       </div>
                     ))}
@@ -201,16 +223,13 @@ export default function Checkout() {
                       {address.city}, {address.state} - {address.pincode}<br />
                       Phone: {address.phone}
                     </div>
-                    <button style={{ fontSize: '0.8rem', color: 'var(--color-accent)', marginTop: '0.5rem', fontWeight: 600 }} onClick={() => setStep(1)}>
+                    <button style={{ fontSize: '0.8rem', color: 'var(--color-accent)', marginTop: '0.5rem', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }} onClick={() => setStep(1)}>
                       Change Address
                     </button>
                   </div>
                   <div style={{ borderTop: '1px solid var(--color-border-light)', paddingTop: 'var(--space-lg)' }}>
                     <p style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)', marginBottom: 'var(--space-lg)' }}>
                       Click below to complete your payment. You'll be redirected to a secure payment page.
-                    </p>
-                    <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: 'var(--space-lg)', padding: '0.75rem', background: 'var(--color-bg-secondary)', borderRadius: 'var(--radius-md)' }}>
-                      💡 <strong>Demo Mode:</strong> This is a demo store. No real payment will be processed. Razorpay integration ready — provide your API key to enable live payments.
                     </p>
                     <button className="btn btn-accent btn-lg" style={{ width: '100%' }} onClick={handlePayment} disabled={paymentProcessing} id="pay-now-btn">
                       {paymentProcessing ? '⏳ Opening Payment Gateway...' : `Pay ${formatPrice(total)} via Razorpay`}
@@ -222,12 +241,17 @@ export default function Checkout() {
           </div>
 
           {/* Order Summary */}
-          <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border-light)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-xl)', position: 'sticky', top: 'calc(var(--navbar-height) + var(--space-xl))' }}>
+          <div className={styles.summaryCard}>
             <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.1rem', fontWeight: 600, marginBottom: 'var(--space-md)', paddingBottom: 'var(--space-sm)', borderBottom: '1px solid var(--color-border-light)' }}>Order Summary</h3>
             <div style={{ maxHeight: 200, overflowY: 'auto', marginBottom: 'var(--space-md)' }}>
               {items.map((item, i) => (
                 <div key={i} style={{ display: 'flex', gap: '0.75rem', padding: '0.5rem 0', fontSize: '0.85rem' }}>
-                  <img src={item.image} alt={item.name} style={{ width: 44, height: 44, borderRadius: 6, objectFit: 'cover' }} />
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    style={{ width: 44, height: 44, borderRadius: 6, objectFit: 'cover' }}
+                    onError={(e) => { e.target.onerror = null; e.target.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='800' viewBox='0 0 600 800'><rect width='100%' height='100%' fill='%23eaeaea'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='36' fill='%23a3a3a3' letter-spacing='4'>LUXE</text></svg>" }}
+                  />
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontWeight: 500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.name}</div>
                     <div style={{ color: 'var(--color-text-muted)', fontSize: '0.75rem' }}>Qty: {item.quantity}</div>

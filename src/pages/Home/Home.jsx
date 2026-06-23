@@ -104,6 +104,7 @@ export default function Home() {
               <img
                 src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&q=80"
                 alt="Premium lifestyle collection"
+                onError={(e) => { e.target.onerror = null; e.target.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='800' viewBox='0 0 600 800'><rect width='100%' height='100%' fill='%23eaeaea'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='36' fill='%23a3a3a3' letter-spacing='4'>LUXE</text></svg>" }}
               />
             </div>
             <motion.div

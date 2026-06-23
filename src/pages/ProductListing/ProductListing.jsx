@@ -16,6 +16,12 @@ export default function ProductListing() {
   const [priceMax, setPriceMax] = useState('')
   const [minRating, setMinRating] = useState(0)
   const [filtersOpen, setFiltersOpen] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 12
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [selectedCategories, selectedBrands, priceMin, priceMax, minRating, sortBy, category])
 
   useEffect(() => {
     setSelectedCategories(category ? [category] : [])
@@ -60,6 +66,13 @@ export default function ProductListing() {
 
     return result
   }, [selectedCategories, selectedBrands, priceMin, priceMax, minRating, sortBy])
+
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage)
+  
+  const displayedProducts = useMemo(() => {
+    const startIdx = (currentPage - 1) * itemsPerPage
+    return filteredProducts.slice(startIdx, startIdx + itemsPerPage)
+  }, [filteredProducts, currentPage])
 
   const toggleCategory = (catId) => {
     setSelectedCategories(prev =>
@@ -245,12 +258,52 @@ export default function ProductListing() {
           </aside>
 
           {/* Product Grid */}
-          <div>
-            {filteredProducts.length > 0 ? (
-              <div className={`${styles.productGrid} ${viewMode === 'list' ? styles.list : ''}`}>
-                {filteredProducts.map((product, i) => (
-                  <ProductCard key={product.id} product={product} index={i} viewMode={viewMode} />
-                ))}
+          <div style={{ flex: 1 }}>
+            {displayedProducts.length > 0 ? (
+              <div>
+                <motion.div
+                  key={currentPage}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.35 }}
+                  className={`${styles.productGrid} ${viewMode === 'list' ? styles.list : ''}`}
+                >
+                  {displayedProducts.map((product, i) => (
+                    <ProductCard key={product.id} product={product} index={i} viewMode={viewMode} />
+                  ))}
+                </motion.div>
+
+                {/* Pagination Controls */}
+                {totalPages > 1 && (
+                  <div className={styles.pagination}>
+                    <button
+                      className="btn btn-outline btn-sm"
+                      onClick={() => {
+                        setCurrentPage(prev => Math.max(1, prev - 1))
+                        window.scrollTo({ top: 0, behavior: 'smooth' })
+                      }}
+                      disabled={currentPage === 1}
+                      aria-label="Previous page"
+                    >
+                      Previous
+                    </button>
+                    <span className={styles.pageInfo}>
+                      Page {currentPage} of {totalPages}
+                    </span>
+                    <button
+                      className="btn btn-outline btn-sm"
+                      onClick={() => {
+                        setCurrentPage(prev => Math.min(totalPages, prev + 1))
+                        window.scrollTo({ top: 0, behavior: 'smooth' })
+                      }}
+                      disabled={currentPage === totalPages}
+                      aria-label="Next page"
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <div className={styles.noResults}>
