@@ -7,7 +7,7 @@ function getTouchDistance(t1, t2) {
 }
 
 // ── Desktop Zoom ──────────────────────────────────────────────────────────────
-function DesktopZoom({ src, alt, onError }) {
+function DesktopZoom({ src, alt, onError, onClick }) {
   const [active, setActive] = useState(false)
   const [lensPos, setLensPos] = useState({ x: 0, y: 0 })   // % of image
   const imgRef = useRef(null)
@@ -39,6 +39,8 @@ function DesktopZoom({ src, alt, onError }) {
         onMouseEnter={() => setActive(true)}
         onMouseLeave={() => setActive(false)}
         onMouseMove={handleMouseMove}
+        onClick={onClick}
+        style={{ cursor: 'zoom-in' }}
       >
         <img
           src={src}
@@ -79,7 +81,7 @@ function DesktopZoom({ src, alt, onError }) {
 }
 
 // ── Mobile Touch Zoom ─────────────────────────────────────────────────────────
-function MobileZoom({ src, alt, onError }) {
+function MobileZoom({ src, alt, onError, onClick }) {
   const [scale, setScale] = useState(1)
   const [origin, setOrigin] = useState({ x: 50, y: 50 })
   const [translate, setTranslate] = useState({ x: 0, y: 0 })
@@ -187,6 +189,7 @@ function MobileZoom({ src, alt, onError }) {
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
+      onClick={scale === 1 ? onClick : undefined}
       style={{ touchAction: scale > 1 ? 'none' : 'pan-y' }}
     >
       <img
@@ -222,7 +225,7 @@ function MobileZoom({ src, alt, onError }) {
 }
 
 // ── Main Export ───────────────────────────────────────────────────────────────
-export default function ImageZoom({ src, alt, onError }) {
+export default function ImageZoom({ src, alt, onError, onClick }) {
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
@@ -234,6 +237,6 @@ export default function ImageZoom({ src, alt, onError }) {
   }, [])
 
   return isMobile
-    ? <MobileZoom src={src} alt={alt} onError={onError} />
-    : <DesktopZoom src={src} alt={alt} onError={onError} />
+    ? <MobileZoom src={src} alt={alt} onError={onError} onClick={onClick} />
+    : <DesktopZoom src={src} alt={alt} onError={onError} onClick={onClick} />
 }

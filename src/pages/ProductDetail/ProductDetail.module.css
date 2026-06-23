@@ -403,3 +403,479 @@
         width: 120px;
     }
 }
+
+/* Amazon/Flipkart Features Styling */
+
+/* Price Details */
+.priceDetails {
+    margin-top: calc(-1 * var(--space-md));
+    margin-bottom: var(--space-xs);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.bestPriceBadge {
+    padding: 4px 10px;
+    background: rgba(16, 185, 129, 0.08);
+    color: var(--color-success);
+    font-size: 0.72rem;
+    font-weight: 700;
+    border-radius: var(--radius-sm);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border: 1px solid rgba(16, 185, 129, 0.15);
+}
+
+.priceDropText {
+    font-size: 0.82rem;
+    color: var(--color-text-secondary);
+}
+
+.savingsLine {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+}
+
+/* Notify Form */
+.notifyForm {
+    display: flex;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+    width: 100%;
+}
+
+.notifyForm input {
+    flex: 1;
+}
+
+.notifySuccessMsg {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: var(--radius-md);
+    color: var(--color-success);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: var(--space-sm);
+}
+
+/* Delivery Estimator */
+.deliveryEstimator {
+    margin-top: var(--space-xl);
+    padding: var(--space-xl);
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-light);
+}
+
+.estimatorTitle {
+    font-size: 0.95rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-md);
+}
+
+.estimatorForm {
+    display: flex;
+    gap: var(--space-sm);
+    max-width: 380px;
+}
+
+.estimatorForm input {
+    flex: 1;
+}
+
+.estimatorError {
+    font-size: 0.78rem;
+    color: var(--color-error);
+    margin-top: var(--space-xs);
+}
+
+.estimatorResult {
+    font-size: 0.88rem;
+    margin-top: var(--space-md);
+    font-weight: 500;
+    color: var(--color-text);
+}
+
+.freeShippingText {
+    font-size: 0.76rem;
+    color: var(--color-text-muted);
+    margin-top: var(--space-sm);
+}
+
+/* Q&A Section */
+.qaSection {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+}
+
+.askQuestionBox {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+}
+
+.askQuestionForm {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.loginToAsk {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+}
+
+.qaList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.qaItem {
+    padding: var(--space-xl);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+}
+
+.qaQuestion, .qaAnswer {
+    display: flex;
+    gap: var(--space-sm);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.qaQuestion {
+    font-weight: 700;
+    margin-bottom: var(--space-xs);
+}
+
+.qaLabel {
+    font-weight: 800;
+    color: var(--color-accent);
+    width: 20px;
+    flex-shrink: 0;
+}
+
+.qaText {
+    color: var(--color-text);
+}
+
+.pendingAnswer {
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+.qaMeta {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin-top: var(--space-sm);
+    padding-left: 28px;
+}
+
+/* Recently Viewed Carousel */
+.recentlyViewedSection {
+    margin-top: var(--space-4xl);
+    border-top: 1px solid var(--color-border-light);
+    padding-top: var(--space-3xl);
+}
+
+.recentlyViewedCarousel {
+    overflow-x: auto;
+    padding: var(--space-md) 0;
+    margin: 0 calc(var(--space-md) * -1);
+    scrollbar-width: thin;
+}
+
+.recentlyViewedCarousel::-webkit-scrollbar {
+    height: 6px;
+}
+
+.recentlyViewedCarousel::-webkit-scrollbar-thumb {
+    background-color: var(--color-border);
+    border-radius: 3px;
+}
+
+.carouselGrid {
+    display: flex;
+    gap: var(--space-lg);
+    padding: 0 var(--space-md);
+}
+
+.carouselGrid > * {
+    flex: 0 0 280px;
+}
+
+/* Frequently Bought Together */
+.frequentlyBought {
+    margin-top: var(--space-4xl);
+    border-top: 1px solid var(--color-border-light);
+    padding-top: var(--space-3xl);
+}
+
+.fbtContainer {
+    display: flex;
+    gap: var(--space-2xl);
+    flex-wrap: wrap;
+    align-items: center;
+    background: var(--color-bg-secondary);
+    padding: var(--space-2xl);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-border-light);
+}
+
+.fbtRow {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    flex-wrap: wrap;
+}
+
+.fbtItem {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 120px;
+    align-items: center;
+    text-align: center;
+}
+
+.fbtImg {
+    width: 100px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border-light);
+    background: var(--color-surface);
+}
+
+.fbtName {
+    font-size: 0.76rem;
+    font-weight: 500;
+    height: 36px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    color: var(--color-text);
+    text-decoration: none;
+}
+
+.fbtName:hover {
+    color: var(--color-accent);
+}
+
+.fbtPrice {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.fbtPlus {
+    font-size: 1.8rem;
+    font-weight: 300;
+    color: var(--color-text-muted);
+}
+
+.fbtItemWrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+}
+
+.fbtActionCard {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    flex: 1;
+    min-width: 240px;
+    padding: var(--space-lg);
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-light);
+}
+
+.fbtTotalText {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+}
+
+.fbtTotalPrice {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+/* Sticky Bottom Mobile Bar */
+.stickyBottomBar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border-light);
+    padding: var(--space-md) var(--space-lg) calc(var(--space-md) + env(safe-area-inset-bottom));
+    z-index: 500;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.08);
+    transform: translateY(105%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: none;
+}
+
+.stickyVisible {
+    transform: translateY(0);
+}
+
+.stickyBarContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-md);
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+
+.stickyProductInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.stickyName {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text);
+    max-width: 180px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.stickyPrice {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.stickyActions {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: center;
+    flex: 1;
+    justify-content: flex-end;
+}
+
+/* Star Rating Histogram */
+.reviewsSummaryBox {
+    display: flex;
+    gap: var(--space-3xl);
+    margin-bottom: var(--space-2xl);
+    padding: var(--space-2xl);
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-border-light);
+    flex-wrap: wrap;
+}
+
+.summaryLeft {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 140px;
+}
+
+.bigRatingText {
+    font-size: 4rem;
+    font-weight: 800;
+    font-family: var(--font-serif);
+    line-height: 1.1;
+    color: var(--color-text);
+}
+
+.summaryRight {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 280px;
+}
+
+.histogramRow {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 0.82rem;
+    color: var(--color-text-secondary);
+}
+
+.histogramStarLabel {
+    width: 32px;
+    text-align: right;
+    font-weight: 500;
+}
+
+.progressBarBg {
+    flex: 1;
+    height: 8px;
+    background: var(--color-border-light);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.progressBarFill {
+    height: 100%;
+    background: #f59e0b;
+    border-radius: var(--radius-full);
+}
+
+.histogramPercentLabel {
+    width: 36px;
+    text-align: right;
+    font-weight: 600;
+}
+
+.histogramCountLabel {
+    width: 52px;
+    text-align: right;
+    color: var(--color-text-muted);
+}
+
+@media (max-width: 768px) {
+    .stickyBottomBar {
+        display: block;
+    }
+    
+    .recentlyViewedCarousel {
+        margin: 0;
+    }
+    
+    .carouselGrid {
+        padding: 0;
+    }
+    
+    .carouselGrid > * {
+        flex: 0 0 220px;
+    }
+    
+    .fbtContainer {
+        padding: var(--space-lg);
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .fbtRow {
+        justify-content: center;
+    }
+}

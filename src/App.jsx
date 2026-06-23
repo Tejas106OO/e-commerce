@@ -11,6 +11,7 @@ import { ToastProvider } from './context/ToastContext'
 import { AuthProvider } from './context/AuthContext'
 import { CartProvider } from './context/CartContext'
 import { WishlistProvider } from './context/WishlistContext'
+import { RecentlyViewedProvider } from './context/RecentlyViewedContext'
 
 // Import Pages
 import Home from './pages/Home/Home'
@@ -40,7 +41,8 @@ export default function App() {
           <AuthProvider>
             <CartProvider>
               <WishlistProvider>
-                <div className="app-container">
+                <RecentlyViewedProvider>
+                  <div className="app-container">
                   <Navbar />
                   <main style={{ minHeight: '80vh' }}>
                     <Routes>
@@ -88,11 +90,12 @@ export default function App() {
                   <BackToTop />
                   <CookieConsent />
                 </div>
-              </WishlistProvider>
-            </CartProvider>
-          </AuthProvider>
-        </ToastProvider>
-      </ThemeProvider>
-    </ErrorBoundary>
-  )
+              </RecentlyViewedProvider>
+            </WishlistProvider>
+          </CartProvider>
+        </AuthProvider>
+      </ToastProvider>
+    </ThemeProvider>
+  </ErrorBoundary>
+)
 }

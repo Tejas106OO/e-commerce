@@ -5,12 +5,18 @@ import { ArrowRight, Sparkles, Star, Truck, Shield, RotateCcw } from 'lucide-rea
 import { products, categories, testimonials } from '../../data/products'
 import ProductCard from '../../components/ProductCard/ProductCard'
 import { useToast } from '../../context/ToastContext'
+import { useRecentlyViewed } from '../../context/RecentlyViewedContext'
 import styles from './Home.module.css'
 
 export default function Home() {
   const { addToast } = useToast()
+  const { recentlyViewed } = useRecentlyViewed()
   const [countdown, setCountdown] = useState({ hours: 23, minutes: 45, seconds: 30 })
   const [email, setEmail] = useState('')
+
+  const recentlyViewedProducts = recentlyViewed
+    .map(id => products.find(p => p.id === id))
+    .filter(Boolean)
 
   const featuredProducts = products.filter(p => p.featured).slice(0, 8)
   const dealProducts = products.filter(p => p.deal).slice(0, 4)
@@ -240,6 +246,23 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
+
+      {/* ========== RECENTLY VIEWED ========== */}
+      {recentlyViewedProducts.length > 0 && (
+        <section className={styles.recentlyViewed} id="recently-viewed-section">
+          <div className="container">
+            <h2 className="section-title">Recently Viewed</h2>
+            <p className="section-subtitle">Pick up where you left off</p>
+            <div className={styles.carouselContainer}>
+              <div className={styles.carouselGrid}>
+                {recentlyViewedProducts.map((p, i) => (
+                  <ProductCard key={p.id} product={p} index={i} />
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ========== TESTIMONIALS ========== */}
       <section className={styles.testimonials} id="testimonials-section">

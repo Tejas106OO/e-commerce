@@ -537,3 +537,42 @@
   .heroStats { gap: var(--space-lg); }
   .dealsProducts { grid-template-columns: repeat(2, 1fr); gap: var(--space-sm); }
 }
+
+/* ========== RECENTLY VIEWED ========== */
+.recentlyViewed {
+  padding: var(--space-4xl) 0;
+  background: var(--color-bg);
+}
+
+.carouselContainer {
+  overflow-x: auto;
+  padding: var(--space-md) 0;
+  margin: 0 calc(var(--space-md) * -1);
+  scrollbar-width: thin;
+}
+
+.carouselContainer::-webkit-scrollbar {
+  height: 6px;
+}
+
+.carouselContainer::-webkit-scrollbar-thumb {
+  background-color: var(--color-border);
+  border-radius: 3px;
+}
+
+.carouselGrid {
+  display: flex;
+  gap: var(--space-lg);
+  padding: 0 var(--space-md);
+}
+
+.carouselGrid > * {
+  flex: 0 0 280px;
+}
+
+@media (max-width: 768px) {
+  .carouselGrid > * {
+    flex: 0 0 240px;
+  }
+}
+

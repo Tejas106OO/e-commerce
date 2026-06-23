@@ -46,3 +46,123 @@
 
 @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } .summary { position: static; } }
 @media (max-width: 600px) { .cartItem { flex-direction: column; } .itemImage { width: 100%; height: 200px; } }
+
+/* Save for Later Styles */
+.saveLaterBtn {
+  font-size: 0.8rem;
+  color: var(--color-accent);
+  font-weight: 500;
+  padding: 0.25rem 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
+
+.saveLaterBtn:hover {
+  opacity: 0.7;
+}
+
+.savedSection {
+  margin-top: var(--space-3xl);
+  border-top: 1px solid var(--color-border-light);
+  padding-top: var(--space-xl);
+}
+
+.savedHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-sm) 0;
+  color: var(--color-text);
+}
+
+.savedList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+}
+
+.savedItem {
+  display: flex;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+}
+
+.savedItemImage {
+  width: 90px;
+  height: 110px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.savedItemImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.savedItemInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.savedItemName {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.savedItemName:hover {
+  color: var(--color-accent);
+}
+
+.savedItemPrice {
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-top: 2px;
+}
+
+.savedItemActions {
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+  margin-top: auto;
+  padding-top: var(--space-sm);
+}
+
+.savedRemoveBtn {
+  font-size: 0.8rem;
+  color: var(--color-error);
+  font-weight: 500;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.savedRemoveBtn:hover {
+  opacity: 0.7;
+}
+
+@media (max-width: 600px) {
+  .savedItem {
+    flex-direction: column;
+  }
+  .savedItemImage {
+    width: 100%;
+    height: 150px;
+  }
+}
+

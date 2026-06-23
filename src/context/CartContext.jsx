@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer, useEffect, useRef } from 'react'
+import { createContext, useContext, useReducer, useEffect, useRef, useState } from 'react'
 import { useToast } from './ToastContext'
 import { useAuth } from './AuthContext'
 
@@ -81,8 +81,31 @@ export function CartProvider({ children }) {
   const userId = user?.id || 'guest'
   const loadedUserIdRef = useRef(userId)
 
+  // Save for Later state
+  const [savedForLater, setSavedForLater] = useState(() => {
+    let initialUserId = 'guest'
+    try {
+      const authData = localStorage.getItem('luxe_auth')
+      if (authData) {
+        const parsedAuth = JSON.parse(authData)
+        if (parsedAuth && parsedAuth.id) {
+          initialUserId = parsedAuth.id
+        }
+      }
+    } catch {}
+    
+    const key = `luxe_saved_for_later_${initialUserId}`
+    try {
+      const data = localStorage.getItem(key)
+      return data ? JSON.parse(data) : []
+    } catch {
+      return []
+    }
+  })
+
   const subtotal = state.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
 
+  // Sync Cart
   useEffect(() => {
     const key = `luxe_cart_${userId}`
     let initialCart = { items: [], coupon: null }
@@ -102,6 +125,22 @@ export function CartProvider({ children }) {
       localStorage.setItem(key, JSON.stringify(state))
     }
   }, [state, userId])
+
+  // Sync Save for Later
+  useEffect(() => {
+    const key = `luxe_saved_for_later_${userId}`
+    try {
+      const data = localStorage.getItem(key)
+      setSavedForLater(data ? JSON.parse(data) : [])
+    } catch {}
+  }, [userId])
+
+  useEffect(() => {
+    const key = `luxe_saved_for_later_${userId}`
+    try {
+      localStorage.setItem(key, JSON.stringify(savedForLater))
+    } catch {}
+  }, [savedForLater, userId])
 
   useEffect(() => {
     if (state.coupon && subtotal < state.coupon.minOrder) {
@@ -123,6 +162,29 @@ export function CartProvider({ children }) {
   const removeCoupon = () => dispatch({ type: 'REMOVE_COUPON' })
   const clearCart = () => dispatch({ type: 'CLEAR_CART' })
 
+  // Save for Later Handlers
+  const saveForLater = (index) => {
+    const itemToSave = state.items[index]
+    if (!itemToSave) return
+    removeFromCart(index)
+    setSavedForLater(prev => {
+      const exists = prev.some(
+        i => i.id === itemToSave.id && i.selectedSize === itemToSave.selectedSize && i.selectedColor === itemToSave.selectedColor
+      )
+      if (exists) return prev
+      return [...prev, itemToSave]
+    })
+  }
+
+  const moveToCart = (savedItem, index) => {
+    setSavedForLater(prev => prev.filter((_, idx) => idx !== index))
+    addToCart(savedItem, savedItem.selectedSize, savedItem.selectedColor, 1)
+  }
+
+  const removeFromSaved = (index) => {
+    setSavedForLater(prev => prev.filter((_, idx) => idx !== index))
+  }
+
   const cartCount = state.items.reduce((sum, item) => sum + item.quantity, 0)
 
   let discount = 0
@@ -142,7 +204,8 @@ export function CartProvider({ children }) {
     <CartContext.Provider value={{
       items: state.items, coupon: state.coupon,
       addToCart, removeFromCart, updateQuantity, setCoupon, removeCoupon, clearCart,
-      cartCount, subtotal, discount, shipping, tax, total
+      cartCount, subtotal, discount, shipping, tax, total,
+      savedForLater, saveForLater, moveToCart, removeFromSaved
     }}>
       {children}
     </CartContext.Provider>

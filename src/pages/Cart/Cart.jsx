@@ -9,9 +9,14 @@ import { coupons } from '../../data/products'
 import styles from './Cart.module.css'
 
 export default function Cart() {
-  const { items, removeFromCart, updateQuantity, coupon, setCoupon, removeCoupon, subtotal, discount, shipping, tax, total, cartCount } = useCart()
+  const { 
+    items, removeFromCart, updateQuantity, coupon, setCoupon, removeCoupon, 
+    subtotal, discount, shipping, tax, total, cartCount,
+    savedForLater, saveForLater, moveToCart, removeFromSaved 
+  } = useCart()
   const { addToast } = useToast()
   const [couponCode, setCouponCode] = useState('')
+  const [isSavedExpanded, setIsSavedExpanded] = useState(true)
 
   const handleApplyCoupon = (e) => {
     e.preventDefault()
@@ -90,13 +95,97 @@ export default function Cart() {
                       </div>
                       <span className={styles.itemPrice}>{formatPrice(item.price * item.quantity)}</span>
                     </div>
-                    <button className={styles.removeBtn} onClick={() => { removeFromCart(index); addToast('Item removed from cart', 'info') }}>
-                      <Trash2 size={13} style={{ verticalAlign: 'middle', marginRight: 4 }} /> Remove
-                    </button>
+                    <div style={{ display: 'flex', gap: 'var(--space-md)', marginTop: 'var(--space-xs)' }}>
+                      <button className={styles.removeBtn} onClick={() => { removeFromCart(index); addToast('Item removed from cart', 'info') }} aria-label="Remove item" id={`remove-item-${item.id}`}>
+                        <Trash2 size={13} style={{ verticalAlign: 'middle', marginRight: 4 }} /> Remove
+                      </button>
+                      <button className={styles.saveLaterBtn} onClick={() => { saveForLater(index); addToast('Item saved for later', 'info') }} aria-label="Save for later" id={`save-later-${item.id}`}>
+                        💾 Save for Later
+                      </button>
+                    </div>
                   </div>
                 </motion.div>
               ))}
             </AnimatePresence>
+
+            {/* Collapsible Saved for Later Section */}
+            {savedForLater && savedForLater.length > 0 && (
+              <div className={styles.savedSection}>
+                <button
+                  className={styles.savedHeader}
+                  onClick={() => setIsSavedExpanded(!isSavedExpanded)}
+                  aria-expanded={isSavedExpanded}
+                  aria-label="Toggle Saved for Later items"
+                  id="saved-for-later-toggle"
+                >
+                  <h3 style={{ margin: 0, fontFamily: 'var(--font-serif)', fontSize: '1.2rem' }}>Saved for Later ({savedForLater.length})</h3>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{isSavedExpanded ? '▲ Hide' : '▼ Show'}</span>
+                </button>
+                <AnimatePresence>
+                  {isSavedExpanded && (
+                    <motion.div
+                      className={styles.savedList}
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      style={{ overflow: 'hidden' }}
+                    >
+                      {savedForLater.map((item, idx) => (
+                        <motion.div
+                          key={`${item.id}-${item.selectedSize}-${item.selectedColor}-${idx}`}
+                          className={styles.savedItem}
+                          layout
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 10 }}
+                        >
+                          <Link to={`/product/${item.id}`} className={styles.savedItemImage}>
+                            <img
+                              src={item.image}
+                              alt={item.name}
+                              onError={(e) => { e.target.onerror = null; e.target.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='800' viewBox='0 0 600 800'><rect width='100%' height='100%' fill='%23eaeaea'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='36' fill='%23a3a3a3' letter-spacing='4'>LUXE</text></svg>" }}
+                            />
+                          </Link>
+                          <div className={styles.savedItemInfo}>
+                            <span className={styles.itemBrand}>{item.brand}</span>
+                            <Link to={`/product/${item.id}`} className={styles.savedItemName}>{item.name}</Link>
+                            <span className={styles.itemVariant}>
+                              {item.selectedSize && item.selectedSize !== 'One Size' && `Size: ${item.selectedSize}`}
+                              {item.selectedSize && item.selectedColor && ' | '}
+                              {item.selectedColor && (
+                                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                  Color: <span style={{ width: 12, height: 12, borderRadius: '50%', background: item.selectedColor, display: 'inline-block', border: '1px solid var(--color-border)' }} />
+                                </span>
+                              )}
+                            </span>
+                            <div className={styles.savedItemPrice}>{formatPrice(item.price)}</div>
+                            <div className={styles.savedItemActions}>
+                              <button 
+                                className="btn btn-accent btn-sm" 
+                                onClick={() => { moveToCart(item, idx); addToast('Moved item to cart', 'success') }}
+                                aria-label="Move to cart"
+                                id={`move-to-cart-${item.id}`}
+                              >
+                                Move to Cart
+                              </button>
+                              <button 
+                                className={styles.savedRemoveBtn} 
+                                onClick={() => { removeFromSaved(idx); addToast('Removed saved item', 'info') }}
+                                aria-label="Delete saved item"
+                                id={`delete-saved-${item.id}`}
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            )}
           </div>
 
           {/* Summary */}
