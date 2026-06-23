@@ -23,6 +23,18 @@ export default function ProductDetail() {
   const [selectedSize, setSelectedSize] = useState(product?.sizes?.[0] || null)
   const [quantity, setQuantity] = useState(1)
   const [activeTab, setActiveTab] = useState('description')
+  
+  const [zoomActive, setZoomActive] = useState(false)
+  const [zoomPos, setZoomPos] = useState({ x: 0, y: 0 })
+
+  const handleMouseMove = (e) => {
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect()
+    const x = ((e.clientX - left) / width) * 100
+    const y = ((e.clientY - top) / height) * 100
+    const clampedX = Math.max(0, Math.min(100, x))
+    const clampedY = Math.max(0, Math.min(100, y))
+    setZoomPos({ x: clampedX, y: clampedY })
+  }
 
   // Scroll to top whenever the product changes
   const prevIdRef = useRef(null)
@@ -88,13 +100,46 @@ export default function ProductDetail() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <div className={styles.mainImage}>
+            <div 
+              className={styles.mainImage}
+              onMouseEnter={() => setZoomActive(true)}
+              onMouseLeave={() => setZoomActive(false)}
+              onMouseMove={handleMouseMove}
+              style={{ position: 'relative' }}
+            >
               <img
                 src={allImages[selectedImage]}
                 alt={product.name}
                 onError={(e) => { e.target.onerror = null; e.target.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='800' viewBox='0 0 600 800'><rect width='100%' height='100%' fill='%23eaeaea'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='36' fill='%23a3a3a3' letter-spacing='4'>LUXE</text></svg>" }}
               />
+              {zoomActive && (
+                <div 
+                  className={styles.zoomLens}
+                  style={{
+                    left: `${zoomPos.x}%`,
+                    top: `${zoomPos.y}%`,
+                    transform: 'translate(-50%, -50%)'
+                  }}
+                />
+              )}
             </div>
+
+            {/* Floating Zoom Panel */}
+            <AnimatePresence>
+              {zoomActive && (
+                <motion.div 
+                  className={styles.zoomPanel}
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 10 }}
+                  transition={{ duration: 0.2 }}
+                  style={{
+                    backgroundImage: `url(${allImages[selectedImage]})`,
+                    backgroundPosition: `${zoomPos.x}% ${zoomPos.y}%`
+                  }}
+                />
+              )}
+            </AnimatePresence>
             {allImages.length > 1 && (
               <div className={styles.thumbnails}>
                 {allImages.map((img, i) => (
