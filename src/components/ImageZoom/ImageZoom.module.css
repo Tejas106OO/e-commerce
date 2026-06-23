@@ -1,0 +1,145 @@
+/* ── Shared fallback SVG ─────────────────────────────────────────────────── */
+
+/* ── Desktop Zoom ─────────────────────────────────────────────────────────── */
+
+/* Wrapper positions the zoom result panel absolutely to the right */
+.desktopZoomWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.mainImgContainer {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--color-bg-secondary);
+  user-select: none;
+}
+
+.zoomCursor {
+  cursor: crosshair;
+}
+
+.mainImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+  transition: transform 0.35s ease;
+}
+
+/* Subtle lens square drawn over the image */
+.lens {
+  position: absolute;
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  background: rgba(201, 169, 110, 0.12);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+  pointer-events: none;
+  z-index: 5;
+  border-radius: 4px;
+}
+
+/* Large zoom result panel — floats to the right of the gallery column */
+.zoomResult {
+  position: absolute;
+  left: calc(100% + 1.5rem);
+  top: 0;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-xl);
+  z-index: 200;
+  pointer-events: none;
+  background-color: var(--color-bg-secondary);
+  overflow: hidden;
+  animation: zoomFadeIn 0.15s ease forwards;
+}
+
+@keyframes zoomFadeIn {
+  from { opacity: 0; transform: translateX(8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Hide zoom panel on tablets and smaller */
+@media (max-width: 1024px) {
+  .desktopZoomWrapper {
+    display: none;
+  }
+}
+
+/* ── Mobile Touch Zoom ────────────────────────────────────────────────────── */
+
+.mobileZoomContainer {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--color-bg-secondary);
+  cursor: grab;
+}
+
+.mobileZoomContainer:active {
+  cursor: grabbing;
+}
+
+.mobileImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+  transform-origin: center center;
+}
+
+.resetZoomBtn {
+  position: absolute;
+  bottom: var(--space-sm);
+  right: var(--space-sm);
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+  backdrop-filter: blur(4px);
+}
+
+.zoomHint {
+  position: absolute;
+  bottom: var(--space-sm);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.45);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.7rem;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  pointer-events: none;
+  white-space: nowrap;
+  backdrop-filter: blur(4px);
+  animation: hintFade 3s ease 1.5s forwards;
+  opacity: 1;
+}
+
+@keyframes hintFade {
+  to { opacity: 0; }
+}
+
+/* Only show mobile container on tablets/phones */
+.mobileZoomContainer {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .mobileZoomContainer {
+    display: block;
+  }
+}

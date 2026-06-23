@@ -9,6 +9,7 @@ import { useToast } from '../../context/ToastContext'
 import { useAuth } from '../../context/AuthContext'
 import { formatPrice, getDiscountPercent } from '../../utils/helpers'
 import ProductCard from '../../components/ProductCard/ProductCard'
+import ImageZoom from '../../components/ImageZoom/ImageZoom'
 import styles from './ProductDetail.module.css'
 
 export default function ProductDetail() {
@@ -88,13 +89,11 @@ export default function ProductDetail() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <div className={styles.mainImage}>
-              <img
-                src={allImages[selectedImage]}
-                alt={product.name}
-                onError={(e) => { e.target.onerror = null; e.target.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='800' viewBox='0 0 600 800'><rect width='100%' height='100%' fill='%23eaeaea'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='36' fill='%23a3a3a3' letter-spacing='4'>LUXE</text></svg>" }}
-              />
-            </div>
+            <ImageZoom
+              src={allImages[selectedImage]}
+              alt={product.name}
+              onError={(e) => { e.target.onerror = null; e.target.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='800' viewBox='0 0 600 800'><rect width='100%' height='100%' fill='%23eaeaea'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='36' fill='%23a3a3a3' letter-spacing='4'>LUXE</text></svg>" }}
+            />
             {allImages.length > 1 && (
               <div className={styles.thumbnails}>
                 {allImages.map((img, i) => (

@@ -20,12 +20,14 @@
     grid-template-columns: 1fr 1fr;
     gap: var(--space-3xl);
     align-items: start;
+    overflow: visible;
 }
 
 /* Gallery */
 .gallery {
     position: sticky;
     top: calc(var(--navbar-height) + var(--space-xl));
+    overflow: visible;
 }
 
 .mainImage {
